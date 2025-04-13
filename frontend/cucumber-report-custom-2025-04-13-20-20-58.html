@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Report</title>
+<style>
+body {
+    font-family: "Trebuchet MS", sans-serif;
+    background-color: #f9f9f9;
+    padding: 20px;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #4CAF50;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 5px;
+}
+
+.general-info {
+    margin-bottom: 20px;
+}
+
+.general-info p {
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.general-info p:last-child {
+    border-bottom: none; /* Remove separator from last element */
+}
+
+.scenario-row {
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
+    cursor: pointer;
+    background-color: #fafafa;
+    transition: background-color 0.3s;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.075);
+}
+
+.scenario-row:hover {
+    background-color: #f6f6f6;
+}
+
+/* Remove hover effect on .scenario-row when .step-row is hovered */
+.scenario-row:hover:has(.step-row:hover) {
+    background-color: inherit;
+}
+
+.details {
+    display: none;
+    padding-left: 20px;
+    margin-top: 5px;
+    border-left: 1px solid #ddd;
+}
+
+.description-row {
+    padding: 8px 0;
+    margin: 5px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px; /* Space between tags */
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background-color: rgb(232, 172, 17);
+    color: #ffffff;
+    border-radius: 16px; /* Fully rounded ends */
+    font-size: 12px;
+    font-style: normal;
+    font-weight: normal;
+}
+
+.tag:hover {
+    background-color: #c19c10;
+    cursor: default;
+}
+
+.white-label-sport-tag {
+    display: inline-block;
+    padding: 6px 8px;
+    margin-top: 4px;
+    background-color: #338137;
+    color: #ffffff;
+    border-radius: 16px; /* Fully rounded ends */
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+}
+
+.white-label-casino-tag {
+    display: inline-block;
+    padding: 6px 8px;
+    margin-top: 4px;
+    background-color: #335a81;
+    color: #ffffff;
+    border-radius: 16px; /* Fully rounded ends */
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+}
+
+.step-row {
+    padding: 8px;
+    border: 1px solid #cfcfcf;
+    margin-top: 2px;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    font-weight: normal;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.075);
+    max-width: 100%;
+}
+
+.step-row:hover {
+    background-color: #efefef;
+}
+
+.step-keyword {
+    color: #000000;
+    font-weight: bold;
+}
+
+.test-case {
+    color: #e17f02;
+    font-weight: bold;
+}
+
+.sub-details {
+    display: none;
+    padding: 10px;
+    margin-top: 5px;
+    border-left: 1px solid #d3d3d3;
+}
+
+.datatable-row {
+    display: flex;
+    padding: 1px;
+    margin: 2px;
+    border: 1px solid #8fa39a;
+    justify-content: normal;
+    background-color: #cbd6d1;
+    border-radius: 8px;
+    font-size: 11px;
+    max-width: 100%;
+}
+
+.datatable-row-log {
+    display: flex;
+    padding: 1px;
+    margin: 2px;
+    cursor: text;
+    border: 1px solid #8fa39a;
+    justify-content: normal;
+    background-color: #ecefee;
+    border-radius: 8px;
+    font-size: 11px;
+    max-width: 100%;
+}
+
+/*.datatable-row:nth-child(even) {*/
+/*    background-color: #678777;*/
+/*}*/
+
+.sub-header {
+    font-weight: bold;
+    background-color: #eeeeee;
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.sub-cell {
+    flex: 1;
+    padding: 6px;
+    border-right: 0;
+    text-align: left;
+    font-weight: normal;
+}
+
+.sub-cell:last-child {
+    border-right: none;
+}
+
+.chart-container {
+    margin-top: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* Space between chart and info */
+}
+
+#testChart {
+    max-width: 700px;
+    max-height: 200px;
+    height: auto !important;
+    aspect-ratio: 1;
+}
+
+.chart-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px; /* Space between items */
+    font-size: 16px;
+    max-width: 100%; /* Prevent overflow */
+    padding: 0 10px; /* Small padding on sides */
+}
+
+.chart-info > div {
+    white-space: nowrap; /* Keep each item on one line */
+}
+
+.icon {
+    width: 16px;
+    height: 16px;
+    margin: -2px;
+    padding: 0;
+}
+
+.icon-retry {
+    width: 10px;
+    height: 10px;
+    margin: 0 8px;
+    padding: 0;
+}
+
+.icon-info {
+    width: 14px;
+    height: 14px;
+    margin: -2px 1px;
+    padding: 0;
+}
+
+.icon-step {
+    width: 12px;
+    height: 12px;
+    margin: -1px;
+    padding: 0;
+}
+
+.toggle-button-container {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    padding: 6px 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}</style>
+</head>
+<body>
+<div class="container">
+<h2>General Info</h2><div class="general-info">
+<p><strong>Environment:</strong>
+<span class="white-label-sport-tag">TEST</span>
+</p>
+<p><strong>Device:</strong>
+<span class="white-label-sport-tag">API</span>
+</p>
+<p><strong>Browser:</strong>
+<span class="white-label-sport-tag">N/A</span>
+</p>
+<p><strong>White Label:</strong>
+<span class="white-label-sport-tag">N/A</span>
+</p>
+</div>
+<h2>Summary</h2><div class="chart-container">
+<canvas id="testChart"></canvas>
+<div class="chart-info">
+<div><strong>Passed:</strong> <span id="passedCount">1</span></div>
+<div><strong>Failed:</strong> <span id="failedCount">1</span></div>
+<div><strong>Skipped:</strong> <span id="skippedCount">1</span></div>
+</div>
+</div>
+<h2>Test Scenarios</h2>
+<div class="toggle-button-container">
+<button onclick="expandAll()">Expand All</button>
+<button onclick="expandTestRowsOnly()">Expand Scenarios</button>
+<button onclick="collapseAll()">Collapse All</button>
+<button onclick="toggleFailed()">Show Only Failed</button>
+
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Basketball live manual event - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@DerivedMarketsEpic</span>
+<span class="tag">@BasketballDerivedMarkets</span>
+<span class="tag">@Retry</span>
+<span class="tag">@SkipDriverSetup</span>
+<span class="tag">@BasketballLiveManualEvent</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span class="test-case">Test Case: 'Create manual event and assert initial derived markets data is generated'</span></div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>user is logged in Back Office</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>create a manual event</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=eEyEa6mNSqJm&format=png" title="Click for more logs" alt="Logs"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">live</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">basketball</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">league id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">home team id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">away team id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">start after hours</div>
+<div class="sub-cell">0</div>
+</div>
+<hr style="margin: 16px 0; border: 0; border-top: 1px solid #ccc;" />
+<div class="datatable-row-log">
+<div class="sub-cell">
+[20:20:39] [INFO ] Event ID: 8746731<br>[20:20:39] [INFO ] League ID: 16342<br></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>change 'event' betting setting 'dm live' with state 'python'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>set event board live state '1q'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>set event board live state 'play'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>set event limits</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">limit type</div>
+<div class="sub-cell">payout</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">time range</div>
+<div class="sub-cell">-1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">18</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell">8</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">handicap</div>
+<div class="sub-cell">93.00</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">over under</div>
+<div class="sub-cell">93.00</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">other</div>
+<div class="sub-cell">-1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">value</div>
+<div class="sub-cell">93.50</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>create a two way market</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">event id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">18</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell">8</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell">99</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">spread</div>
+<div class="sub-cell">-5.50</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">first odd</div>
+<div class="sub-cell">1.88</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">second odd</div>
+<div class="sub-cell">1.88</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>create a two way market</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">event id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">18</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell">8</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell">39</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">spread</div>
+<div class="sub-cell">156.50</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">first odd</div>
+<div class="sub-cell">1.88</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">second odd</div>
+<div class="sub-cell">1.88</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 13 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 0 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">13</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 2 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">14</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 2 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">15</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 2 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">16</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 2 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">59</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 5 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">18</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>assert markets count is 'equal' to 2 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">0</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span class="test-case">Test Case: 'Verify Team Total markets spreads'</span></div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>market and odds data</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">spread</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">18</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell">8</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">is derived</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert basketball team total markets are correct</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span class="test-case">Test Case: 'Verify DMs are invalidated when main market odds are below 1.20'</span></div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>market and odds data</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell">99</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">spread</div>
+<div class="sub-cell">-5.5</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">18</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell">8</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">is derived</div>
+<div class="sub-cell">0</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>send market update</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=eEyEa6mNSqJm&format=png" title="Click for more logs" alt="Logs"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">0</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell">99</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">spread</div>
+<div class="sub-cell">-5.50</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">18</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell">8</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">min odd</div>
+<div class="sub-cell">1.10</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">max odd</div>
+<div class="sub-cell">1.19</div>
+</div>
+<hr style="margin: 16px 0; border: 0; border-top: 1px solid #ccc;" />
+<div class="datatable-row-log">
+<div class="sub-cell">
+[20:20:45] [INFO ] Market ID: 1214051778<br></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert odds are 'updated' for given markets in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=eEyEa6mNSqJm&format=png" title="Click for more logs" alt="Logs"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">excluded market types</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+<hr style="margin: 16px 0; border: 0; border-top: 1px solid #ccc;" />
+<div class="datatable-row-log">
+<div class="sub-cell">
+[20:20:47] [INFO ] Given markets updated in 0 seconds.<br></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>assert markets count is 'equal' to 2 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">0</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>assert markets count is 'equal' to 0 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span class="test-case">Test Case: 'Verify DMs are revalidated when main market odds are more than 1.20'</span></div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>market and odds data</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell">99</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">spread</div>
+<div class="sub-cell">-5.5</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">18</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell">8</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">is derived</div>
+<div class="sub-cell">0</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>send market update</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=eEyEa6mNSqJm&format=png" title="Click for more logs" alt="Logs"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">0</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell">99</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">spread</div>
+<div class="sub-cell">-5.50</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">18</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell">8</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">min odd</div>
+<div class="sub-cell">1.70</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">max odd</div>
+<div class="sub-cell">1.99</div>
+</div>
+<hr style="margin: 16px 0; border: 0; border-top: 1px solid #ccc;" />
+<div class="datatable-row-log">
+<div class="sub-cell">
+[20:20:47] [INFO ] Market ID: 1214051778<br></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert odds are 'updated' for given markets in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=eEyEa6mNSqJm&format=png" title="Click for more logs" alt="Logs"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">excluded market types</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+<hr style="margin: 16px 0; border: 0; border-top: 1px solid #ccc;" />
+<div class="datatable-row-log">
+<div class="sub-cell">
+[20:20:48] [INFO ] Given markets updated in 0 seconds.<br></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>assert markets count is 'equal' to 2 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">0</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>assert markets count is 'equal' to 13 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span class="test-case">Test Case: 'Verify DMs are invalidated when main market is invalidated'</span></div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>send market update</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=eEyEa6mNSqJm&format=png" title="Click for more logs" alt="Logs"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">false</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">0</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell">39</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">spread</div>
+<div class="sub-cell">156.50</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">18</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell">8</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">min odd</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">max odd</div>
+<div class="sub-cell"></div>
+</div>
+<hr style="margin: 16px 0; border: 0; border-top: 1px solid #ccc;" />
+<div class="datatable-row-log">
+<div class="sub-cell">
+[20:20:49] [INFO ] Market ID: 1214051779<br></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 1 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">0</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>validate market and selection</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">false</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell">39</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">selection</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">spread</div>
+<div class="sub-cell">156.5</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">18</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell">8</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>assert markets count is 'equal' to 0 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span class="test-case">Test Case: 'Verify DMs are revalidated when main market is revalidated'</span></div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>send market update</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=eEyEa6mNSqJm&format=png" title="Click for more logs" alt="Logs"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">0</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell">39</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">spread</div>
+<div class="sub-cell">156.50</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">18</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell">8</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">min odd</div>
+<div class="sub-cell">1.40</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">max odd</div>
+<div class="sub-cell">1.70</div>
+</div>
+<hr style="margin: 16px 0; border: 0; border-top: 1px solid #ccc;" />
+<div class="datatable-row-log">
+<div class="sub-cell">
+[20:20:50] [INFO ] Market ID: 1214051779<br></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 13 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span class="test-case">Test Case: 'Verify DMs are recalculated when main markets are changed'</span></div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>market and odds data</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">spread</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">is derived</div>
+<div class="sub-cell">1</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>send market update</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=eEyEa6mNSqJm&format=png" title="Click for more logs" alt="Logs"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">max odd</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">true</div>
+<div class="sub-cell">1.86</div>
+</div>
+<hr style="margin: 16px 0; border: 0; border-top: 1px solid #ccc;" />
+<div class="datatable-row-log">
+<div class="sub-cell">
+[20:20:52] [INFO ] Market ID: 1214051778<br>[20:20:52] [WARN ] Could not find selected market in database, new market will be created.<br>[20:20:52] [WARN ] Could not find selected market in database, new market will be created.<br></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 13 in 30 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert odds are 'updated' for given markets in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=eEyEa6mNSqJm&format=png" title="Click for more logs" alt="Logs"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">excluded market types</div>
+<div class="sub-cell">4, 35</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+<hr style="margin: 16px 0; border: 0; border-top: 1px solid #ccc;" />
+<div class="datatable-row-log">
+<div class="sub-cell">
+[20:20:54] [INFO ] Given markets updated in 0 seconds.<br></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>assert basketball team total markets are correct</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span class="test-case">Test Case: 'Verify 2q markets are invalidated when live game period is changed to 2q'</span></div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>set event board live state '2q'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>set event board live state 'play'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 11 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 0 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">13</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 0 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">14</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 2 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">15</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 2 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">16</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 0 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">17</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 2 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">59</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>assert markets count is 'equal' to 5 in 10 seconds</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">is valid</div>
+<div class="sub-cell">true</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">derived type</div>
+<div class="sub-cell">1</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">market type id</div>
+<div class="sub-cell"></div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">game period id</div>
+<div class="sub-cell">18</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">line entity id</div>
+<div class="sub-cell"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let showingOnlyFailed = false;
+
+function toggleFailed() {
+    showingOnlyFailed = !showingOnlyFailed;
+
+    const allScenarios = document.querySelectorAll('.scenario-row');
+
+    allScenarios.forEach(row => {
+        const hasFailedIcon = row.querySelector('img[alt="failed"]') !== null;
+        if (showingOnlyFailed) {
+            row.style.display = hasFailedIcon ? '' : 'none';
+        } else {
+            row.style.display = '';
+        }
+    });
+
+    // Optionally update button text
+    document.querySelector('button[onclick="toggleFailed()"]').textContent =
+        showingOnlyFailed ? 'Show All' : 'Show Only Failed';
+}
+
+function toggleDetails(element) {
+    const details = element.querySelector('.details');
+    details.style.display = details.style.display === 'block' ? 'none' : 'block';
+}
+
+function toggleSubDetails(event, element) {
+    event.stopPropagation();  // Prevent parent test row from collapsing
+    const details = element.querySelector('.sub-details');
+    details.style.display = details.style.display === 'block' ? 'none' : 'block';
+}
+
+function expandAll() {
+    document.querySelectorAll('.details, .sub-details').forEach(details => {
+        details.style.display = 'block';
+    });
+}
+
+function collapseAll() {
+    document.querySelectorAll('.details, .sub-details').forEach(details => {
+        details.style.display = 'none';
+    });
+}
+
+function expandTestRowsOnly() {
+    const testRows = document.querySelectorAll('.scenario-row');
+    testRows.forEach(row => {
+        const details = row.querySelector('.details');
+        if (details) {
+            details.style.display = 'block'; // Expand test row details
+            // Collapse sub-details inside the test row
+            details.querySelectorAll('.sub-details').forEach(subDetail => {
+                subDetail.style.display = 'none';
+            });
+        }
+    });
+}
+
+const passed = 1;
+const failed = 0;
+const skipped = 0;
+
+document.getElementById('passedCount').innerText = passed;
+document.getElementById('failedCount').innerText = failed;
+document.getElementById('skippedCount').innerText = skipped;
+document.querySelectorAll('.datatable-row-log').forEach(rowLog => {
+    rowLog.addEventListener('click', function (event) {
+        event.stopPropagation(); // 🔥 This prevents the parent row from collapsing
+    });
+});
+
+const ctx = document.getElementById('testChart').getContext('2d');
+new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Passed', 'Failed', 'Skipped'],
+        datasets: [{
+            data: [passed, failed, skipped],
+            backgroundColor: ['#4CAF50', '#F44336', '#FFC107'],
+            borderColor: ['#388E3C', '#D32F2F', '#FFA000'],
+            borderWidth: 1,
+            hoverOffset: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false, // This is crucial!
+        plugins: {
+            legend: {
+                position: 'top',
+                align: 'center'
+            }
+        }
+    }
+});</script>
+</body>
+</html>
