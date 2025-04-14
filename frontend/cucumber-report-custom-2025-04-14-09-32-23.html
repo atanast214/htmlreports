@@ -1,0 +1,2882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Report</title>
+<style>
+body {
+    font-family: "Trebuchet MS", sans-serif;
+    background-color: #f9f9f9;
+    padding: 20px;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #4CAF50;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 5px;
+}
+
+.general-info {
+    margin-bottom: 20px;
+}
+
+.general-info p {
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.general-info p:last-child {
+    border-bottom: none; /* Remove separator from last element */
+}
+
+.scenario-row {
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
+    cursor: pointer;
+    background-color: #fafafa;
+    transition: background-color 0.3s;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.075);
+}
+
+.scenario-row:hover {
+    background-color: #f6f6f6;
+}
+
+/* Remove hover effect on .scenario-row when .step-row is hovered */
+.scenario-row:hover:has(.step-row:hover) {
+    background-color: inherit;
+}
+
+.details {
+    display: none;
+    padding-left: 20px;
+    margin-top: 5px;
+    border-left: 1px solid #ddd;
+}
+
+.description-row {
+    padding: 8px 0;
+    margin: 5px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px; /* Space between tags */
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background-color: rgb(232, 172, 17);
+    color: #ffffff;
+    border-radius: 16px; /* Fully rounded ends */
+    font-size: 12px;
+    font-style: normal;
+    font-weight: normal;
+}
+
+.tag:hover {
+    background-color: #c19c10;
+    cursor: default;
+}
+
+.white-label-sport-tag {
+    display: inline-block;
+    padding: 6px 8px;
+    margin-top: 4px;
+    background-color: #338137;
+    color: #ffffff;
+    border-radius: 16px; /* Fully rounded ends */
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+}
+
+.white-label-casino-tag {
+    display: inline-block;
+    padding: 6px 8px;
+    margin-top: 4px;
+    background-color: #335a81;
+    color: #ffffff;
+    border-radius: 16px; /* Fully rounded ends */
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+}
+
+.step-row {
+    padding: 8px;
+    border: 1px solid #cfcfcf;
+    margin-top: 2px;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    font-weight: normal;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.075);
+    max-width: 100%;
+}
+
+.step-row:hover {
+    background-color: #efefef;
+}
+
+.step-keyword {
+    color: #000000;
+    font-weight: bold;
+}
+
+.test-case {
+    color: #e17f02;
+    font-weight: bold;
+}
+
+.sub-details {
+    display: none;
+    padding: 10px;
+    margin-top: 5px;
+    border-left: 1px solid #d3d3d3;
+}
+
+.datatable-row {
+    display: flex;
+    padding: 1px;
+    margin: 2px;
+    border: 1px solid #8fa39a;
+    justify-content: normal;
+    background-color: #cbd6d1;
+    border-radius: 8px;
+    font-size: 11px;
+    max-width: 100%;
+}
+
+.datatable-row-log {
+    display: flex;
+    padding: 1px;
+    margin: 2px;
+    cursor: text;
+    border: 1px solid #8fa39a;
+    justify-content: normal;
+    background-color: #ecefee;
+    border-radius: 8px;
+    font-size: 11px;
+    max-width: 100%;
+}
+
+/*.datatable-row:nth-child(even) {*/
+/*    background-color: #678777;*/
+/*}*/
+
+.sub-header {
+    font-weight: bold;
+    background-color: #eeeeee;
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.sub-cell {
+    flex: 1;
+    padding: 6px;
+    border-right: 0;
+    text-align: left;
+    font-weight: normal;
+}
+
+.sub-cell:last-child {
+    border-right: none;
+}
+
+.chart-container {
+    margin-top: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* Space between chart and info */
+}
+
+#testChart {
+    max-width: 700px;
+    max-height: 200px;
+    height: auto !important;
+    aspect-ratio: 1;
+}
+
+.chart-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px; /* Space between items */
+    font-size: 16px;
+    max-width: 100%; /* Prevent overflow */
+    padding: 0 10px; /* Small padding on sides */
+}
+
+.chart-info > div {
+    white-space: nowrap; /* Keep each item on one line */
+}
+
+.icon {
+    width: 16px;
+    height: 16px;
+    margin: -2px;
+    padding: 0;
+}
+
+.icon-retry {
+    width: 10px;
+    height: 10px;
+    margin: 0 8px;
+    padding: 0;
+}
+
+.icon-info {
+    width: 14px;
+    height: 14px;
+    margin: -2px 1px;
+    padding: 0;
+}
+
+.icon-step {
+    width: 12px;
+    height: 12px;
+    margin: -1px;
+    padding: 0;
+}
+
+.toggle-button-container {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    padding: 6px 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}</style>
+</head>
+<body>
+<div class="container">
+<h2>General Info</h2><div class="general-info">
+<p><strong>Environment:</strong>
+<span class="white-label-sport-tag">PROD</span>
+</p>
+<p><strong>Device:</strong>
+<span class="white-label-sport-tag">Desktop</span>
+</p>
+<p><strong>Browser:</strong>
+<span class="white-label-sport-tag">Chrome</span>
+</p>
+<p><strong>White Label:</strong>
+<span class="white-label-sport-tag">WLS-18</span>
+</p>
+</div>
+<h2>Summary</h2><div class="chart-container">
+<canvas id="testChart"></canvas>
+<div class="chart-info">
+<div><strong>Passed:</strong> <span id="passedCount">1</span></div>
+<div><strong>Failed:</strong> <span id="failedCount">1</span></div>
+<div><strong>Skipped:</strong> <span id="skippedCount">1</span></div>
+</div>
+</div>
+<h2>Test Scenarios</h2>
+<div class="toggle-button-container">
+<button onclick="expandAll()">Expand All</button>
+<button onclick="expandTestRowsOnly()">Expand Scenarios</button>
+<button onclick="collapseAll()">Collapse All</button>
+<button onclick="toggleFailed()">Show Failed</button>
+
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Verify mini basketball bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@ValidateMiniBasketball</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_mini_basketball</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>add 20 EUR funds if user balance is less than 10</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>check mini basketball section</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on selection from mini basketball</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>place stake for single bet</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on PlaceBet button</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>verify bet status in Bet Slip is 'running'</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Verify esports section - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@EsportsSection</span>
+<span class="tag">@AQ-376sp</span>
+<span class="tag">@CFT-8699sp</span>
+<span class="tag">@ValidateEsportsSection</span>
+<span class="tag">@NoDataBaseTest</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click on 'sports' menu from main header navigation</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click on sport 'esports' from side sports menu</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>check esports section</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Verify league sorting in All Leagues page - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@AllLeaguesPage</span>
+<span class="tag">@AllLeaguesSorting</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click on 'sports' menu from main header navigation</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on sport 'soccer' from side sports menu</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on 'all leagues' tab in Sports page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify league sorting in All Leagues page by popularity and alphabetically</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63688&format=png" alt="failed"/>
+<span>Verify scoreboard elements - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@EsportsSection</span>
+<span class="tag">@ValidateScoreboardElement</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on 'live betting' menu from main header navigation</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click on tab 'soccer' from top live betting sport menu</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>select the first listed live event</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63688&format=png" alt="FAILED"/>
+<span class="step-keyword">Then</span>
+<span>validate the scoreboard menu</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Verify bet slip elements - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@ValidateBetSlip</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_bet_slip</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>check Bet Slip and its sub tabs are displayed</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>check My Bets and its sub tabs are displayed</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place early combo Greyhounds bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@RacingBets</span>
+<span class="tag">@GreyhoundsEarlyCombo</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_greyhounds_combo_bet_early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">greyhounds</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">combo</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place cash out early single bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@CashOutBets</span>
+<span class="tag">@CashOutEarlySingleBetList</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_cash_out_single_early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">any</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">single</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">max odd</div>
+<div class="sub-cell">15.00</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">filter</div>
+<div class="sub-cell">cashout events early</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify bet status in Bet Slip is 'running'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>perform a 'full' cash out from 'bet list'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after cash out bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place early system bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@SystemBets</span>
+<span class="tag">@SystemEarly</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_system_bet_early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">any</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">system</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">system type</div>
+<div class="sub-cell">robin</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">min odd</div>
+<div class="sub-cell">1.25</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">max odd</div>
+<div class="sub-cell">10.50</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place early if bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@IfBetEarly</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_if_bet</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">any</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">if</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">max odd</div>
+<div class="sub-cell">5.50</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Verify bet data in Bet History page - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@BetHistorySingleBet</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_single_bet_history</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">soccer, basketball</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">single</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">1</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>navigate to placed bet in Bet History page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify bet data is valid in Bet History page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>navigate to Bet History page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>select bet history type 'running'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>select bet history time period 'today'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>validate all bets in selected bet history page have status 'equal' to 'running'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>select bet history type 'cashout'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>select bet history time period 'last 3 days'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>validate all bets in selected bet history page have cash out option</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>select bet history type 'closed'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>select bet history time period 'yesterday'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>validate all bets in selected bet history page have status 'not equal' to 'running'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>select bet history type 'all'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>select bet history time period 'today'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>validate all bets are placed 'today' in selected bet history page</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63688&format=png" alt="failed"/>
+<span>Verify odd format - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@OddsFormat</span>
+<span class="tag">@AQ-381sp</span>
+<span class="tag">@CFT-8677sp</span>
+<span class="tag">@ValidateOddsFormatAmerican</span>
+<span class="tag">@NoDataBaseTest</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>navigate to "sports" page from navigation</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63688&format=png" alt="FAILED"/>
+<span class="step-keyword">And</span>
+<span>change sports view to "american"</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">And</span>
+<span>click on sport 'soccer' from side sports menu</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">Then</span>
+<span>check odd format options</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63688&format=png" alt="failed"/>
+<span>Place partial cash out early single bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@CashOutBets</span>
+<span class="tag">@PartialCashOutEarlySingle</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_partial_cash_out_single_early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63688&format=png" alt="FAILED"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">soccer</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">single</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">min x 2</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">filter</div>
+<div class="sub-cell">cashout events early</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">Then</span>
+<span>verify bet status in Bet Slip is 'running'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">And</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">When</span>
+<span>perform a 'partial' cash out from 'bet list'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">Then</span>
+<span>verify bet status in Bet List is 'running'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">And</span>
+<span>verify user balance is updated after cash out bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place early combo bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@ComboBets</span>
+<span class="tag">@ComboEarly</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_combo_bet_early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">any</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">combo</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">max odd</div>
+<div class="sub-cell">10.00</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="skipped"/>
+<span>Place early single Horse Racing bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@RacingBets</span>
+<span class="tag">@HorseracingEarlySingle</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_horse_racing_single_bet_early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">horse racing</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">single</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="skipped"/>
+<span>Cash out live single bet from My Bets - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@CashOutBets</span>
+<span class="tag">@CashOutLiveSingleMyBets</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_cash_out_live_single_bet_my_bets</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">live</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">any</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">single</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">max odd</div>
+<div class="sub-cell">15.00</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">filter</div>
+<div class="sub-cell">cashout events early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">expected status</div>
+<div class="sub-cell">running</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">When</span>
+<span>perform a 'full' cash out from 'my bets'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after cash out bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place early outright single bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@OutrightSingleBets</span>
+<span class="tag">@OutrightEarlySingle</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_outright_single_bet</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">any</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">single</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">filter</div>
+<div class="sub-cell">outright events</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place early each-way racing bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@RacingBets</span>
+<span class="tag">@RacingEachway</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_racing_eachway</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">horse racing</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">eachway</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Cash out prematch bet from My Bets - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@CashOutBets</span>
+<span class="tag">@CashOutPrematchSingleMyBets</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_cash_out_early_my_bets</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">any</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">single</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">max odd</div>
+<div class="sub-cell">15.00</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">filter</div>
+<div class="sub-cell">cashout events early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">expected status</div>
+<div class="sub-cell">running</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>perform a 'full' cash out from 'my bets'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after cash out bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Verify events are present in the Calendar page - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@CalendarEventsGeneral</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click on 'live sports' menu from main header navigation</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on 'calendar' tab in Live Sports page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on sport 'soccer' from Calendar view</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on day 'today' from Calendar view</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>select random event from Calendar and validate odds</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click back button in Event View page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on sport 'basketball' from Calendar view</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on day 'tomorrow' from Calendar view</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>select random event from Calendar and validate odds</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click back button in Event View page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on sport 'soccer' from Calendar view</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on day 'after 2 days' from Calendar view</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>select random event from Calendar and validate odds</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click back button in Event View page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on day 'after 3 days' from Calendar view</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>select random event from Calendar and validate odds</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click back button in Event View page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on day 'later' from Calendar view</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>select random event from Calendar and validate odds</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place early single Greyhounds bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@RacingBets</span>
+<span class="tag">@GreyhoundsEarlySingle</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_greyhounds_single_bet_early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">greyhounds</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">single</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Verify mini soccer bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@ValidateMiniSoccer</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_mini_soccer</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>add 20 EUR funds if user balance is less than 10</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>check mini soccer section</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on selection from mini football</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>place stake for single bet</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on PlaceBet button</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>verify bet status in Bet Slip is 'running'</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Verify mini tennis bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@ValidateMiniTennis</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_mini_tennis</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>add 20 EUR funds if user balance is less than 10</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>check mini tennis section</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on selection from mini tennis</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>place stake for single bet</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on PlaceBet button</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>verify bet status in Bet Slip is 'running'</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63688&format=png" alt="failed"/>
+<span>Verify odd format - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@OddsFormat</span>
+<span class="tag">@AQ-381sp</span>
+<span class="tag">@CFT-8677sp</span>
+<span class="tag">@ValidateOddsFormatEuro</span>
+<span class="tag">@NoDataBaseTest</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>navigate to "sports" page from navigation</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>change sports view to "euro"</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click on sport 'soccer' from side sports menu</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63688&format=png" alt="FAILED"/>
+<span class="step-keyword">Then</span>
+<span>check odd format options</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63688&format=png" alt="failed"/>
+<span>Place partial cash out early single bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@CashOutBets</span>
+<span class="tag">@PartialCashOutEarlySingleMyBets</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_partial_cash_out_single_early_my_bets</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63688&format=png" alt="FAILED"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">soccer</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">single</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">min x 2</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">filter</div>
+<div class="sub-cell">cashout events early</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">Then</span>
+<span>verify bet status in Bet Slip is 'running'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">And</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">When</span>
+<span>perform a 'partial' cash out from 'my bets'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">Then</span>
+<span>verify bet status in Bet List is 'running'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63263&format=png" alt="SKIPPED"/>
+<span class="step-keyword">And</span>
+<span>verify user balance is updated after cash out bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63688&format=png" alt="failed"/>
+<span>Verify virtual sports section - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@VirtualSportsSection</span>
+<span class="tag">@AQ-374sp</span>
+<span class="tag">@CFT-8693sp</span>
+<span class="tag">@ValidateVirtualSportsSection</span>
+<span class="tag">@NoDataBaseTest</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click on 'sports' menu from main header navigation</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click on sport 'virtual sports' from side sports menu</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63688&format=png" alt="FAILED"/>
+<span class="step-keyword">Then</span>
+<span>check virtual sports section</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place early combo Horse Racing bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@RacingBets</span>
+<span class="tag">@HorseracingEarlyCombo</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_horse_racing_combo_bet_early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">horse racing</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">combo</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place cash out live single bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@CashOutBets</span>
+<span class="tag">@CashOutLiveSingleBetList</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_cash_out_single_live</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">live</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">any</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">single</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">filter</div>
+<div class="sub-cell">cashout events live</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">max odd</div>
+<div class="sub-cell">5.50</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">expected status</div>
+<div class="sub-cell">running</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">max retries</div>
+<div class="sub-cell">5</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>perform a 'full' cash out from 'bet list'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after cash out bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place live single bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@SingleBets</span>
+<span class="tag">@SingleLive</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_single_bet_live</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">live</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">any</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">single</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Sport stats validation - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@severity=normal</span>
+<span class="tag">@ValidateSportStatsPageDesktop</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_sport_stats</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click on 'sports' menu from main header navigation</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on sport 'soccer' from side sports menu</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on 'daily match list' tab in Sports page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>select day 'today' from daily match list</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>open event stats page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>open new window for event stats page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>validate H2H elements section</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>navigate to pre-match tab of stats</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>validate pre-match elements section</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Verify my combo place bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@ValidateMyComboPlaceBet</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_my_combo_bet</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>check my combo is displayed</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>add 10 EUR funds if user balance is less than 10</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click on Add to BetSlip button</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on PlaceBet button</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify bet status in Bet Slip is 'running'</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Verify Daily Match List page events - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@DailyMatchListGeneral</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>navigate to sport 'soccer' and daily match list day 'today'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>validate league presence in daily match list page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>validate odds presence in randomly selected league in daily match list page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>navigate to sport 'soccer' and daily match list day 'tomorrow'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>validate league presence in daily match list page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>validate odds presence in randomly selected league in daily match list page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>navigate to sport 'soccer' and daily match list day 'after 2 days'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>validate league presence in daily match list page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>validate odds presence in randomly selected league in daily match list page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>navigate to sport 'soccer' and daily match list day 'after 3 days'</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>validate league presence in daily match list page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>validate odds presence in randomly selected league in daily match list page</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place live system bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@SystemBets</span>
+<span class="tag">@SystemLive</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_system_bet_live</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">live</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">any</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">system</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">max odd</div>
+<div class="sub-cell">5.50</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place early Build a Bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@BetBuilderBets</span>
+<span class="tag">@BetBuilderEarly</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_build_bet_early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">soccer</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">bet builder</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Validate Live Center elements - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@severity=normal</span>
+<span class="tag">@AQ-200sp</span>
+<span class="tag">@CFT-8724sp</span>
+<span class="tag">@ValidateSportLiveCenter</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on 'live betting' menu from main header navigation</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click on tab 'soccer' from top live betting sport menu</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>select the first event with active live center</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>validate the live center</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Verify All Leagues page - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@AllLeaguesPage</span>
+<span class="tag">@AllLeaguesGeneral</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click on 'sports' menu from main header navigation</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on sport 'soccer' from side sports menu</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on 'all leagues' tab in Sports page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>validate popular leagues are present in All Leagues page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>click on 'sports' menu from main header navigation</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on sport 'soccer' from side sports menu</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>click on 'all leagues' tab in Sports page</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>validate other leagues are present in All Leagues page</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place live Build a Bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@BetBuilderBets</span>
+<span class="tag">@BetBuilderLive</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_build_bet_live</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">live</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">soccer</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">bet builder</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place live combo bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@ComboBets</span>
+<span class="tag">@ComboLive</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_combo_bet_live</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">live</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">any</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">combo</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">max odd</div>
+<div class="sub-cell">10.00</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+</div>
+</div>
+<div class="scenario-row" onclick="toggleDetails(this)">
+<img class="icon" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="passed"/>
+<span>Place early single bet - WLS-18</span><div class="details">
+<div class="description-row"><span class="tag">@URLFactory</span>
+<span class="tag">@EpicSportBetting</span>
+<span class="tag">@severity=normal</span>
+<span class="tag">@SingleBets</span>
+<span class="tag">@SingleEarly</span>
+<span class="tag">@SportDesktopSmokeTest</span>
+<span class="tag">@SportMobileSmokeTest</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Given</span>
+<span>home page is open</span>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">And</span>
+<span>user is logged in</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">username</div>
+<div class="sub-cell">tu_single_bet_early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">password</div>
+<div class="sub-cell">*****</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">When</span>
+<span>place a bet</span>
+<img class="icon-info" src="https://img.icons8.com/?size=100&id=14079&format=png" title="Click for more info" alt="More Info"/>
+<div class="sub-details">
+<div class="datatable-row">
+<div class="sub-cell">state</div>
+<div class="sub-cell">early</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">sport</div>
+<div class="sub-cell">soccer</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet type</div>
+<div class="sub-cell">single</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet stake</div>
+<div class="sub-cell">minimum</div>
+</div>
+<div class="datatable-row">
+<div class="sub-cell">bet slip disabled</div>
+<div class="sub-cell">false</div>
+</div>
+</div>
+</div>
+<div class="step-row" onclick="toggleSubDetails(event, this)">
+<img class="icon-step" src="https://img.icons8.com/?size=100&id=63312&format=png" alt="SUCCESS"/>
+<span class="step-keyword">Then</span>
+<span>verify user balance is updated after placed bet</span>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let showingOnlyFailed = false;
+
+function toggleFailed() {
+    showingOnlyFailed = !showingOnlyFailed;
+
+    const allScenarios = document.querySelectorAll('.scenario-row');
+
+    allScenarios.forEach(row => {
+        const hasFailedIcon = row.querySelector('img[alt="failed"]') !== null;
+        if (showingOnlyFailed) {
+            row.style.display = hasFailedIcon ? '' : 'none';
+        } else {
+            row.style.display = '';
+        }
+    });
+
+    // Optionally update button text
+    document.querySelector('button[onclick="toggleFailed()"]').textContent =
+        showingOnlyFailed ? 'Show All' : 'Show Failed';
+}
+
+function toggleDetails(element) {
+    const details = element.querySelector('.details');
+    details.style.display = details.style.display === 'block' ? 'none' : 'block';
+}
+
+function toggleSubDetails(event, element) {
+    event.stopPropagation();  // Prevent parent test row from collapsing
+    const details = element.querySelector('.sub-details');
+    details.style.display = details.style.display === 'block' ? 'none' : 'block';
+}
+
+function expandAll() {
+    document.querySelectorAll('.details, .sub-details').forEach(details => {
+        details.style.display = 'block';
+    });
+}
+
+function collapseAll() {
+    document.querySelectorAll('.details, .sub-details').forEach(details => {
+        details.style.display = 'none';
+    });
+}
+
+function expandTestRowsOnly() {
+    const testRows = document.querySelectorAll('.scenario-row');
+    testRows.forEach(row => {
+        const details = row.querySelector('.details');
+        if (details) {
+            details.style.display = 'block'; // Expand test row details
+            // Collapse sub-details inside the test row
+            details.querySelectorAll('.sub-details').forEach(subDetail => {
+                subDetail.style.display = 'none';
+            });
+        }
+    });
+}
+
+const passed = 30;
+const failed = 6;
+const skipped = 2;
+
+document.getElementById('passedCount').innerText = passed;
+document.getElementById('failedCount').innerText = failed;
+document.getElementById('skippedCount').innerText = skipped;
+document.querySelectorAll('.datatable-row-log').forEach(rowLog => {
+    rowLog.addEventListener('click', function (event) {
+        event.stopPropagation(); // 🔥 This prevents the parent row from collapsing
+    });
+});
+
+const ctx = document.getElementById('testChart').getContext('2d');
+new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Passed', 'Failed', 'Skipped'],
+        datasets: [{
+            data: [passed, failed, skipped],
+            backgroundColor: ['#4CAF50', '#F44336', '#FFC107'],
+            borderColor: ['#388E3C', '#D32F2F', '#FFA000'],
+            borderWidth: 1,
+            hoverOffset: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false, // This is crucial!
+        plugins: {
+            legend: {
+                position: 'top',
+                align: 'center'
+            }
+        }
+    }
+});</script>
+</body>
+</html>
